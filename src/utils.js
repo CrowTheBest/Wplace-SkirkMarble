@@ -580,11 +580,5 @@ export const colorpalette = [
         "rgb": [179, 185, 209],
         "free": true,
         "id": 60
-    },
-    {
-        "name": "Transparent",
-        "rgb": null,
-        "free": true,
-        "id": 0
     }
 ]
