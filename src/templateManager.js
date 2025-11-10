@@ -1,5 +1,6 @@
 import Template from "./Template.js";
-import { base64ToUint8, uint8ToBase64, numberToEncoded, debugLog } from "./utils.js";
+import "./utils.js"
+import {base64ToUint8, uint8ToBase64, numberToEncoded, debugLog, colorpalette} from "./utils.js";
 import { clearFrozenTileCache } from "./tileManager.js";
 
 /** Manages the template system.
@@ -77,6 +78,57 @@ export default class TemplateManager {
     this.templatesShouldBeDrawn = true; // Should ALL templates be drawn to the canvas?
   }
 
+    /**
+     * Gets the color of a pixel at given coordinates from loaded templates.
+     * Returns modified colors
+     * @param {number} tileX - Global tile X coordinate
+     * @param {number} tileY - Global tile Y coordinate
+     * @param {Array} colors - Colors from the packet to use if nothing matches
+     * @param {Array} pixels - Pixels coordinates
+     * @returns {Array} patched colors
+     * @since Custom addition
+     */
+
+
+    getPixelsColorAt(tileX, tileY, colors, pixels) {
+        for (const template of this.templatesArray) {
+            let templateIndex = null;
+            let templateXBind = null;
+            let templateYBind = null;
+            for (let i in template.chunked) {
+                let templateTileCoords = i.split(',');
+                if (parseInt(templateTileCoords[0]) === tileX && parseInt(templateTileCoords[1]) === tileY) {
+                    templateIndex = i
+                    templateXBind = parseInt(templateTileCoords[2]);
+                    templateYBind = parseInt(templateTileCoords[3]);
+                    break;
+                }
+            }
+
+            if (templateIndex === null) continue;
+
+            let bitmap = template.chunked[templateIndex];
+            const canvas = new OffscreenCanvas(bitmap.width, bitmap.height, {willReadFrequently: true});
+            const ctx = canvas.getContext('2d');
+
+            ctx.clearRect(0, 0, bitmap.width, bitmap.height);
+            ctx.drawImage(bitmap, 0, 0);
+
+            for (let num = 0; num < pixels.length; num += 2) {
+                let [r, g, b, a] = ctx.getImageData((pixels[num] - templateXBind) * 3 + 1, (pixels[num + 1] - templateYBind) * 3 + 1, 1, 1).data;
+                for (let colorIndex = 1; colorIndex < colorpalette.length; colorIndex++) {
+                    let color = colorpalette[colorIndex].rgb;
+                    if (color[0] === r && color[1] === g && color[2] === b) {
+                        colors[Math.floor(num / 2)] = colorpalette[colorIndex]["id"];
+                        break;
+                    }
+                }
+            }
+            return colors;
+        }
+        return colors;
+    }
+
   /** Creates the JSON object to store templates in
    * @returns {{ whoami: string, scriptVersion: string, schemaVersion: string, templates: Object }} The JSON object
    * @since 0.65.4
@@ -129,8 +181,6 @@ export default class TemplateManager {
 
     // Creates the JSON object if it does not already exist
     if (!this.templatesJSON) {this.templatesJSON = await this.createJSON();}
-
-
 
     this.overlay.handleDisplayStatus(`Creating template at ${coords.join(', ')}...`);
 

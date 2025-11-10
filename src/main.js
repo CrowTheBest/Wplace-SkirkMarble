@@ -6,23 +6,33 @@ import Overlay from './Overlay.js';
 import Observers from './observers.js';
 import ApiManager from './apiManager.js';
 import TemplateManager from './templateManager.js';
-import { debugLog, canvasPosToLatLng, getDebugLoggingEnabled, saveDebugLoggingEnabled } from './utils.js';
+import {canvasPosToLatLng, debugLog, getDebugLoggingEnabled, saveDebugLoggingEnabled} from './utils.js';
+import * as icons from './icons.js';
+import {
+    getCachedTileCount,
+    getSmartCacheStats,
+    initializeTileRefreshPause,
+    isTileRefreshPaused,
+    toggleSmartTileCache,
+    toggleTileRefreshPause
+} from './tileManager.js';
+// Load smart detection settings
+import * as Settings from './settingsManager.js';
+import {
+    getCompactSort,
+    getDragModeEnabled,
+    getSmartDetectionEnabled,
+    getTemplateColorSort,
+    saveCompactSort,
+    saveDragModeEnabled,
+    saveTemplateColorSort
+} from './settingsManager.js';
 
 // Ensure debugLog is globally available to prevent ReferenceError - set it immediately
 if (typeof window !== 'undefined') {
   window.debugLog = debugLog;
   window.getDebugLoggingEnabled = getDebugLoggingEnabled;
 }
-import * as icons from './icons.js';
-import { initializeTileRefreshPause, toggleTileRefreshPause, isTileRefreshPaused, getCachedTileCount, getSmartCacheStats, toggleSmartTileCache, notifyCanvasChange } from './tileManager.js';
-import * as Settings from './settingsManager.js';
-import { getDragModeEnabled, saveDragModeEnabled } from './settingsManager.js';
-import {
-    getTemplateColorSort,
-    saveTemplateColorSort,
-    getCompactSort,
-    saveCompactSort
-} from './settingsManager.js';
 
 const name = GM_info.script.name.toString(); // Name of userscript
 const version = GM_info.script.version.toString(); // Version of userscript
@@ -37,6 +47,7 @@ function inject(callback) {
     const script = document.createElement('script');
     script.setAttribute('bm-name', name); // Passes in the name value
     script.setAttribute('bm-cStyle', consoleStyle); // Passes in the console style value
+    script.setAttribute('bm-templateManager', templateManager); // Passes in the console style value
     script.textContent = `(${callback})();`;
     document.documentElement?.appendChild(script);
     script.remove();
@@ -49,12 +60,19 @@ function flyToLatLng(lat, lng, zoom = 16) {
   })
 }
 
+// CONSTRUCTORS
+const observers = new Observers(); // Constructs a new Observers object
+const overlayMain = new Overlay(name, version); // Constructs a new Overlay object for the main overlay
+const overlayTabTemplate = new Overlay(name, version); // Constructs a Overlay object for the template tab
+const templateManager = new TemplateManager(name, version, overlayMain); // Constructs a new TemplateManager object
+unsafeWindow.templateManager = templateManager;
+
+
 /** What code to execute instantly in the client (webpage) to spy on fetch calls.
  * This code will execute outside of TamperMonkey's sandbox.
  * @since 0.11.15
  */
 inject(() => {
-
   const script = document.currentScript; // Gets the current script HTML Script Element
   const name = script?.getAttribute('bm-name') || 'Blue Marble'; // Gets the name value that was passed in. Defaults to "Blue Marble" if nothing was found
   const consoleStyle = script?.getAttribute('bm-cStyle') || ''; // Gets the console style value that was passed in. Defaults to no styling if nothing was found
@@ -78,7 +96,7 @@ inject(() => {
     childList: true,
     subtree: true
   });
-
+    // Spys on "spontaneous" fetch requests made by the client
   window.addEventListener('message', (event) => {
     const { source, endpoint, blobID, blobData, blink } = event.data;
 
@@ -109,11 +127,27 @@ inject(() => {
     }
   });
 
-  // Spys on "spontaneous" fetch requests made by the client
   const originalFetch = window.fetch; // Saves a copy of the original fetch
 
   // Overrides fetch
   window.fetch = async function(...args) {
+    const url = args[0] instanceof Request ? args[0].url : args[0];
+
+    try {
+        if (typeof url === 'string' && url.includes('https://backend.wplace.live/s0/pixel/')) {
+            const body = JSON.parse(args[1].body);
+
+            const pathParts = url.split('/');
+            const regionX = parseInt(pathParts[5]);
+            const regionY = parseInt(pathParts[6]);
+
+            body["colors"] = window.templateManager.getPixelsColorAt(regionX, regionY, body["colors"], body["coords"]);
+            args[1] = {
+                ...args[1],
+                body: JSON.stringify(body)
+            };
+        }
+    } catch(_) {}
 
     const response = await originalFetch.apply(this, args); // Sends a fetch
     const cloned = response.clone(); // Makes a copy of the response
@@ -603,12 +637,6 @@ outfitStylesheetLink.onload = function () {
 };
 document.head?.appendChild(outfitStylesheetLink);
 
-// CONSTRUCTORS
-const observers = new Observers(); // Constructs a new Observers object
-const overlayMain = new Overlay(name, version); // Constructs a new Overlay object for the main overlay
-const overlayTabTemplate = new Overlay(name, version); // Constructs a Overlay object for the template tab
-const templateManager = new TemplateManager(name, version, overlayMain); // Constructs a new TemplateManager object
-
 // Initialize error map mode from storage
 templateManager.setErrorMapMode(getErrorMapEnabled());
 const apiManager = new ApiManager(templateManager); // Constructs a new ApiManager object
@@ -618,8 +646,6 @@ overlayMain.setApiManager(apiManager); // Sets the API manager
 // Load wrong color settings
 templateManager.loadWrongColorSettings();
 
-// Load smart detection settings
-import { getSmartDetectionEnabled } from './settingsManager.js';
 templateManager.setSmartDetectionEnabled(getSmartDetectionEnabled());
 
 // Load templates with fallback system - FIXED CRITICAL BUG
@@ -2483,7 +2509,7 @@ function showImportDialog(instance) {
     font-size: 48px;
     margin-bottom: 16px;
     color: #64748b;
-    display: flex;
+    display: flex;this.setupFetchLogger();
     justify-content: center;
     align-items: center;
   `;

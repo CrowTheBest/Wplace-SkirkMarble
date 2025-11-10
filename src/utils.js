@@ -196,325 +196,395 @@ export function canvasPosToLatLng(coordinates) {
  * console.log(utils[5]?.rgb); // [255, 255, 255]
  */
 export const colorpalette = [
-  {
-    "name": "Transparent",
-    // Keep rgb as [0,0,0] for palette index consistency but mark as transparent
-    "rgb": [0, 0, 0],
-    "free": true
-  },
-  {
-    "name": "Black",
-    "rgb": [0, 0, 0],
-    "free": true
-  },
-  {
-    "name": "Dark Gray",
-    "rgb": [60, 60, 60],
-    "free": true
-  },
-  {
-    "name": "Gray",
-    "rgb": [120, 120, 120],
-    "free": true
-  },
-  {
-    "name": "Light Gray",
-    "rgb": [210, 210, 210],
-    "free": true
-  },
-  {
-    "name": "White",
-    "rgb": [255, 255, 255],
-    "free": true
-  },
-  {
-    "name": "Deep Red",
-    "rgb": [96, 0, 24],
-    "free": true
-  },
-  {
-    "name": "Red",
-    "rgb": [237, 28, 36],
-    "free": true
-  },
-  {
-    "name": "Orange",
-    "rgb": [255, 127, 39],
-    "free": true
-  },
-  {
-    "name": "Gold",
-    "rgb": [246, 170, 9],
-    "free": true
-  },
-  {
-    "name": "Yellow",
-    "rgb": [249, 221, 59],
-    "free": true
-  },
-  {
-    "name": "Light Yellow",
-    "rgb": [255, 250, 188],
-    "free": true
-  },
-  {
-    "name": "Dark Green",
-    "rgb": [14, 185, 104],
-    "free": true
-  },
-  {
-    "name": "Green",
-    "rgb": [19, 230, 123],
-    "free": true
-  },
-  {
-    "name": "Light Green",
-    "rgb": [135, 255, 94],
-    "free": true
-  },
-  {
-    "name": "Dark Teal",
-    "rgb": [12, 129, 110],
-    "free": true
-  },
-  {
-    "name": "Teal",
-    "rgb": [16, 174, 166],
-    "free": true
-  },
-  {
-    "name": "Light Teal",
-    "rgb": [19, 225, 190],
-    "free": true
-  },
-  {
-    "name": "Dark Blue",
-    "rgb": [40, 80, 158],
-    "free": true
-  },
-  {
-    "name": "Blue",
-    "rgb": [64, 147, 228],
-    "free": true
-  },
-  {
-    "name": "Cyan",
-    "rgb": [96, 247, 242],
-    "free": true
-  },
-  {
-    "name": "Indigo",
-    "rgb": [107, 80, 246],
-    "free": true
-  },
-  {
-    "name": "Light Indigo",
-    "rgb": [153, 177, 251],
-    "free": true
-  },
-  {
-    "name": "Dark Purple",
-    "rgb": [120, 12, 153],
-    "free": true
-  },
-  {
-    "name": "Purple",
-    "rgb": [170, 56, 185],
-    "free": true
-  },
-  {
-    "name": "Light Purple",
-    "rgb": [224, 159, 249],
-    "free": true
-  },
-  {
-    "name": "Dark Pink",
-    "rgb": [203, 0, 122],
-    "free": true
-  },
-  {
-    "name": "Pink",
-    "rgb": [236, 31, 128],
-    "free": true
-  },
-  {
-    "name": "Light Pink",
-    "rgb": [243, 141, 169],
-    "free": true
-  },
-  {
-    "name": "Dark Brown",
-    "rgb": [104, 70, 52],
-    "free": true
-  },
-  {
-    "name": "Brown",
-    "rgb": [149, 104, 42],
-    "free": true
-  },
-  {
-    "name": "Beige",
-    "rgb": [248, 178, 119],
-    "free": true
-  },
-  {
-    "name": "Medium Gray",
-    "rgb": [170, 170, 170],
-    "free": false
-  },
-  {
-    "name": "Dark Red",
-    "rgb": [165, 14, 30],
-    "free": false
-  },
-  {
-    "name": "Light Red",
-    "rgb": [250, 128, 114],
-    "free": false
-  },
-  {
-    "name": "Dark Orange",
-    "rgb": [228, 92, 26],
-    "free": false
-  },
-  {
-    "name": "Light Tan",
-    "rgb": [214, 181, 148],
-    "free": false
-  },
-  {
-    "name": "Dark Goldenrod",
-    "rgb": [156, 132, 49],
-    "free": false
-  },
-  {
-    "name": "Goldenrod",
-    "rgb": [197, 173, 49],
-    "free": false
-  },
-  {
-    "name": "Light Goldenrod",
-    "rgb": [232, 212, 95],
-    "free": false
-  },
-  {
-    "name": "Dark Olive",
-    "rgb": [74, 107, 58],
-    "free": false
-  },
-  {
-    "name": "Olive",
-    "rgb": [90, 148, 74],
-    "free": false
-  },
-  {
-    "name": "Light Olive",
-    "rgb": [132, 197, 115],
-    "free": false
-  },
-  {
-    "name": "Dark Cyan",
-    "rgb": [15, 121, 159],
-    "free": false
-  },
-  {
-    "name": "Light Cyan",
-    "rgb": [187, 250, 242],
-    "free": false
-  },
-  {
-    "name": "Light Blue",
-    "rgb": [125, 199, 255],
-    "free": false
-  },
-  {
-    "name": "Dark Indigo",
-    "rgb": [77, 49, 184],
-    "free": false
-  },
-  {
-    "name": "Dark Slate Blue",
-    "rgb": [74, 66, 132],
-    "free": false
-  },
-  {
-    "name": "Slate Blue",
-    "rgb": [122, 113, 196],
-    "free": false
-  },
-  {
-    "name": "Light Slate Blue",
-    "rgb": [181, 174, 241],
-    "free": false
-  },
-  {
-    "name": "Light Brown",
-    "rgb": [219, 164, 99],
-    "free": false
-  },
-  {
-    "name": "Dark Beige",
-    "rgb": [209, 128, 81],
-    "free": false
-  },
-  {
-    "name": "Light Beige",
-    "rgb": [255, 197, 165],
-    "free": false
-  },
-  {
-    "name": "Dark Peach",
-    "rgb": [155, 82, 73],
-    "free": false
-  },
-  {
-    "name": "Peach",
-    "rgb": [209, 128, 120],
-    "free": false
-  },
-  {
-    "name": "Light Peach",
-    "rgb": [250, 182, 164],
-    "free": false
-  },
-  {
-    "name": "Dark Tan",
-    "rgb": [123, 99, 82],
-    "free": false
-  },
-  {
-    "name": "Tan",
-    "rgb": [156, 132, 107],
-    "free": false
-  },
-  {
-    "name": "Dark Slate",
-    "rgb": [51, 57, 65],
-    "free": false
-  },
-  {
-    "name": "Slate",
-    "rgb": [109, 117, 141],
-    "free": false
-  },
-  {
-    "name": "Light Slate",
-    "rgb": [179, 185, 209],
-    "free": false
-  },
-  {
-    "name": "Dark Stone",
-    "rgb": [109, 100, 63],
-    "free": false
-  },
-  {
-    "name": "Stone",
-    "rgb": [148, 140, 107],
-    "free": false
-  },
-  {
-    "name": "Light Stone",
-    "rgb": [205, 197, 158],
-    "free": false
-  }
-];
+    {
+        "name": "Transparent",
+        // Keep rgb as [0,0,0] for palette index consistency but mark as transparent
+        "rgb": [0, 0, 0],
+        "free": true,
+        "id": 0
+    },
+    {
+        "name": "Black",
+        "rgb": [0, 0, 0],
+        "free": true,
+        "id": 1
+    },
+    {
+        "name": "Dark Gray",
+        "rgb": [60, 60, 60],
+        "free": true,
+        "id": 2
+    },
+    {
+        "name": "Gray",
+        "rgb": [120, 120, 120],
+        "free": true,
+        "id": 3
+    },
+    {
+        "name": "Light Gray",
+        "rgb": [210, 210, 210],
+        "free": true,
+        "id": 4
+    },
+    {
+        "name": "White",
+        "rgb": [255, 255, 255],
+        "free": true,
+        "id": 5
+    },
+    {
+        "name": "Deep Red",
+        "rgb": [96, 0, 24],
+        "free": true,
+        "id": 6
+    },
+    {
+        "name": "Red",
+        "rgb": [237, 28, 36],
+        "free": true,
+        "id": 7
+    },
+    {
+        "name": "Orange",
+        "rgb": [255, 127, 39],
+        "free": true,
+        "id": 8
+    },
+    {
+        "name": "Gold",
+        "rgb": [246, 170, 9],
+        "free": true,
+        "id": 9
+    },
+    {
+        "name": "Yellow",
+        "rgb": [249, 221, 59],
+        "free": true,
+        "id": 10
+    },
+    {
+        "name": "Light Yellow",
+        "rgb": [255, 250, 188],
+        "free": true,
+        "id": 11
+    },
+    {
+        "name": "Dark Green",
+        "rgb": [14, 185, 104],
+        "free": true,
+        "id": 12
+    },
+    {
+        "name": "Green",
+        "rgb": [19, 230, 123],
+        "free": true,
+        "id": 13
+    },
+    {
+        "name": "Light Green",
+        "rgb": [135, 255, 94],
+        "free": true,
+        "id": 14
+    },
+    {
+        "name": "Dark Teal",
+        "rgb": [12, 129, 110],
+        "free": true,
+        "id": 15
+    },
+    {
+        "name": "Teal",
+        "rgb": [16, 174, 166],
+        "free": true,
+        "id": 16
+    },
+    {
+        "name": "Light Teal",
+        "rgb": [19, 225, 190],
+        "free": true,
+        "id": 17
+    },
+    {
+        "name": "Cyan",
+        "rgb": [96, 247, 242],
+        "free": true,
+        "id": 20
+    },
+    {
+        "name": "Light Cyan",
+        "rgb": [187, 250, 242],
+        "free": true,
+        "id": 44
+    },
+    {
+        "name": "Dark Blue",
+        "rgb": [40, 80, 158],
+        "free": true,
+        "id": 18
+    },
+    {
+        "name": "Blue",
+        "rgb": [64, 147, 228],
+        "free": true,
+        "id": 19
+    },
+    {
+        "name": "Indigo",
+        "rgb": [107, 80, 246],
+        "free": true,
+        "id": 21
+    },
+    {
+        "name": "Light Indigo",
+        "rgb": [153, 177, 251],
+        "free": true,
+        "id": 22
+    },
+    {
+        "name": "Dark Purple",
+        "rgb": [120, 12, 153],
+        "free": true,
+        "id": 23
+    },
+    {
+        "name": "Purple",
+        "rgb": [170, 56, 185],
+        "free": true,
+        "id": 24
+    },
+    {
+        "name": "Light Purple",
+        "rgb": [224, 159, 249],
+        "free": true,
+        "id": 25
+    },
+    {
+        "name": "Dark Pink",
+        "rgb": [203, 0, 122],
+        "free": true,
+        "id": 26
+    },
+    {
+        "name": "Pink",
+        "rgb": [236, 31, 128],
+        "free": true,
+        "id": 27
+    },
+    {
+        "name": "Light Pink",
+        "rgb": [243, 141, 169],
+        "free": true,
+        "id": 28
+    },
+    {
+        "name": "Dark Brown",
+        "rgb": [104, 70, 52],
+        "free": true,
+        "id": 29
+    },
+    {
+        "name": "Brown",
+        "rgb": [149, 104, 42],
+        "free": true,
+        "id": 30
+    },
+    {
+        "name": "Beige",
+        "rgb": [248, 178, 119],
+        "free": true,
+        "id": 31
+    },
+    {
+        "name": "Light Beige",
+        "rgb": [255, 197, 165],
+        "free": true,
+        "id": 52
+    },
+    {
+        "name": "Medium Gray",
+        "rgb": [170, 170, 170],
+        "free": true,
+        "id": 32
+    },
+    {
+        "name": "Dark Red",
+        "rgb": [165, 14, 30],
+        "free": true,
+        "id": 33
+    },
+    {
+        "name": "Light Red",
+        "rgb": [250, 128, 114],
+        "free": true,
+        "id": 34
+    },
+    {
+        "name": "Dark Orange",
+        "rgb": [228, 92, 26],
+        "free": true,
+        "id": 35
+    },
+    {
+        "name": "Dark Goldenrod",
+        "rgb": [156, 132, 49],
+        "free": true,
+        "id": 37
+    },
+    {
+        "name": "Goldenrod",
+        "rgb": [197, 173, 49],
+        "free": true,
+        "id": 38
+    },
+    {
+        "name": "Light Goldenrod",
+        "rgb": [232, 212, 95],
+        "free": true,
+        "id": 39
+    },
+    {
+        "name": "Dark Olive",
+        "rgb": [74, 107, 58],
+        "free": true,
+        "id": 40
+    },
+    {
+        "name": "Olive",
+        "rgb": [90, 148, 74],
+        "free": true,
+        "id": 41
+    },
+    {
+        "name": "Light Olive",
+        "rgb": [132, 197, 115],
+        "free": true,
+        "id": 42
+    },
+    {
+        "name": "Dark Cyan",
+        "rgb": [15, 121, 159],
+        "free": true,
+        "id": 43
+    },
+    {
+        "name": "Light Blue",
+        "rgb": [125, 199, 255],
+        "free": true,
+        "id": 45
+    },
+    {
+        "name": "Dark Indigo",
+        "rgb": [77, 49, 184],
+        "free": true,
+        "id": 46
+    },
+    {
+        "name": "Dark Slate Blue",
+        "rgb": [74, 66, 132],
+        "free": true,
+        "id": 47
+    },
+    {
+        "name": "Slate Blue",
+        "rgb": [122, 113, 196],
+        "free": true,
+        "id": 48
+    },
+    {
+        "name": "Light Slate Blue",
+        "rgb": [181, 174, 241],
+        "free": true,
+        "id": 49
+    },
+    {
+        "name": "Dark Peach",
+        "rgb": [155, 82, 73],
+        "free": true,
+        "id": 53
+    },
+    {
+        "name": "Peach",
+        "rgb": [209, 128, 120],
+        "free": true,
+        "id": 54
+    },
+    {
+        "name": "Light Peach",
+        "rgb": [250, 182, 164],
+        "free": true,
+        "id": 55
+    },
+    {
+        "name": "Light Brown",
+        "rgb": [219, 164, 99],
+        "free": true,
+        "id": 50
+    },
+    {
+        "name": "Dark Tan",
+        "rgb": [123, 99, 82],
+        "free": true,
+        "id": 56
+    },
+    {
+        "name": "Tan",
+        "rgb": [156, 132, 107],
+        "free": true,
+        "id": 57
+    },
+    {
+        "name": "Light Tan",
+        "rgb": [214, 181, 148],
+        "free": true,
+        "id": 36
+    },
+    {
+        "name": "Dark Beige",
+        "rgb": [209, 128, 81],
+        "free": true,
+        "id": 51
+    },
+    {
+        "name": "Dark Stone",
+        "rgb": [109, 100, 63],
+        "free": true,
+        "id": 61
+    },
+    {
+        "name": "Stone",
+        "rgb": [148, 140, 107],
+        "free": true,
+        "id": 62
+    },
+    {
+        "name": "Light Stone",
+        "rgb": [205, 197, 158],
+        "free": true,
+        "id": 63
+    },
+    {
+        "name": "Dark Slate",
+        "rgb": [51, 57, 65],
+        "free": true,
+        "id": 58
+    },
+    {
+        "name": "Slate",
+        "rgb": [109, 117, 141],
+        "free": true,
+        "id": 59
+    },
+    {
+        "name": "Light Slate",
+        "rgb": [179, 185, 209],
+        "free": true,
+        "id": 60
+    },
+    {
+        "name": "Transparent",
+        "rgb": null,
+        "free": true,
+        "id": 0
+    }
+]
