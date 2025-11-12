@@ -88,13 +88,16 @@ export default class TemplateManager {
      * @returns {Array} patched colors
      * @since Custom addition
      */
-
-
     getPixelsColorAt(tileX, tileY, colors, pixels) {
-        for (const template of this.templatesArray) {
+        const sortedTemplates = [...this.templatesArray]
+            .filter(t => this.isTemplateEnabled(`${t.sortID} ${t.authorID}`))
+            .sort((a, b) => a.sortID - b.sortID);
+
+        for (const template of sortedTemplates ) {
             let templateIndex = null;
             let templateXBind = null;
             let templateYBind = null;
+
             for (let i in template.chunked) {
                 let templateTileCoords = i.split(',');
                 if (parseInt(templateTileCoords[0]) === tileX && parseInt(templateTileCoords[1]) === tileY) {
@@ -108,6 +111,7 @@ export default class TemplateManager {
             if (templateIndex === null) continue;
 
             let bitmap = template.chunked[templateIndex];
+
             const canvas = new OffscreenCanvas(bitmap.width, bitmap.height, {willReadFrequently: true});
             const ctx = canvas.getContext('2d');
 
@@ -115,14 +119,23 @@ export default class TemplateManager {
             ctx.drawImage(bitmap, 0, 0);
 
             for (let num = 0; num < pixels.length; num += 2) {
+                if ((pixels[num] - templateXBind > bitmap.width / 3) || (pixels[num + 1] - templateYBind > bitmap.height / 3)) continue;
+
+                let bestColor = 0;
+                let nearest = 999999999;
                 let [r, g, b, a] = ctx.getImageData((pixels[num] - templateXBind) * 3 + 1, (pixels[num + 1] - templateYBind) * 3 + 1, 1, 1).data;
+
                 for (let colorIndex = 1; colorIndex < colorpalette.length; colorIndex++) {
-                    let color = colorpalette[colorIndex].rgb;
-                    if (color[0] === r && color[1] === g && color[2] === b) {
-                        colors[Math.floor(num / 2)] = colorpalette[colorIndex]["id"];
-                        break;
+                    let color = colorpalette[colorIndex]["rgb"];
+                    let distance = (r - color[0])**2 + (g - color[1])**2 + (b - color[2])**2
+
+                    if (distance < nearest) {
+                        nearest = distance;
+                        bestColor = colorpalette[colorIndex]["id"];
                     }
+                    if (distance === 0) break;
                 }
+                if (nearest < 8) colors[Math.floor(num / 2)] = bestColor;
             }
             return colors;
         }

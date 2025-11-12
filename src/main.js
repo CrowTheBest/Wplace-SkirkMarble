@@ -134,18 +134,18 @@ inject(() => {
     const url = args[0] instanceof Request ? args[0].url : args[0];
 
     try {
-        if (typeof url === 'string' && url.includes('https://backend.wplace.live/s0/pixel/')) {
+        if (typeof url === 'string' && url.includes('/s0/pixel/')) {
             const body = JSON.parse(args[1].body);
 
             const pathParts = url.split('/');
             const regionX = parseInt(pathParts[5]);
             const regionY = parseInt(pathParts[6]);
-
             body["colors"] = window.templateManager.getPixelsColorAt(regionX, regionY, body["colors"], body["coords"]);
             args[1] = {
                 ...args[1],
                 body: JSON.stringify(body)
             };
+
         }
     } catch(_) {}
 
