@@ -112,8 +112,8 @@ export default class TemplateManager {
 
             let bitmap = template.chunked[templateIndex];
 
-            const canvas = new OffscreenCanvas(bitmap.width, bitmap.height, {willReadFrequently: true});
-            const ctx = canvas.getContext('2d');
+            const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
             ctx.clearRect(0, 0, bitmap.width, bitmap.height);
             ctx.drawImage(bitmap, 0, 0);
