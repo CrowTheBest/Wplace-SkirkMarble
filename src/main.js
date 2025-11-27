@@ -135,6 +135,16 @@ function patchMapColors(myMap) {
             items[i].entry["color"] = {"r": r, "g": g, "b": b, "a": 200};
             items[i].entry["colorIdx"] = patchedColors[i];
         }
+
+        const sorted = [...myMap.entries()].sort(
+            (a, b) => a[1].colorIdx - b[1].colorIdx
+        );
+
+        myMap.clear();
+
+        for (const [k, v] of sorted) {
+            myMap.set(k, v);
+        }
     }
 }
 
@@ -143,7 +153,6 @@ function patchMapColors(myMap) {
     const origCall = Function.prototype.call;
 
     Function.prototype.call = function(thisArg, ...args) {
-        // Проверяем только кликовые обработчики
         if (thisArg && thisArg["__click"] === this) {
             const fn = this;
 
