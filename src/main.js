@@ -159,7 +159,13 @@ function patchMapColors(myMap) {
             // БЛЯДСКИЙ ЖС ИДИ НАХУЙ ЗАЧЕМ ТЫ СЪЕДАЕШЬ ПРОБЕЛЫ
             // кста, если заглохнет - обновить: ноды -> on_click -> .paint
             var shit = fn.toString();  // код функции
-            if (shit.includes("fn.paint") && shit.includes("pg(kr)") && shit.includes("[...s.values()]")) {
+            if (shit.startsWith("async()=>")
+                && shit.includes(".paint")
+                && shit.includes("[...")
+                && shit.includes(".refresh()")
+                && shit.includes(".shouldReload")
+                && shit.includes("finally")
+                && shit.includes(".values()]")) {
                 for (const aboba of maps) { // СУУУКААА ПОЧЕМУ НЕ IN А OF
                     let found = false;
 
