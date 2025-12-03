@@ -68,13 +68,16 @@ const overlayTabTemplate = new Overlay(name, version); // Constructs a Overlay o
 const templateManager = new TemplateManager(name, version, overlayMain); // Constructs a new TemplateManager object
 unsafeWindow.templateManager = templateManager;
 
-const maps = new Set();
-
 const orig = Map.prototype.set;
-Map.prototype.set = function(k, v) {
-    maps.add(this);
+const maps = [];
+
+Map.prototype.set = function (k, v) {
+    if (this.size === 0) {
+        maps.push(this);
+    }
     return orig.call(this, k, v);
 };
+
 
 const palette = new Map();
 for (let color of colorpalette) {
@@ -166,12 +169,16 @@ function patchMapColors(myMap) {
                 && shit.includes(".shouldReload")
                 && shit.includes("finally")
                 && shit.includes(".values()]")) {
-                for (const aboba of maps) { // СУУУКААА ПОЧЕМУ НЕ IN А OF
+                for (let i = maps.length - 1; i >= 0; i--) {
+                    const aboba = maps[i];
+
                     let found = false;
 
                     for (const [key, value] of aboba) {
                         try {
-                            found = (typeof key === "string" && key.includes("t=(") && key.includes("p=("));
+                            found = (typeof key === "string" &&
+                                key.includes("t=(") &&
+                                key.includes("p=("));
                             break;
                         } catch (_) {}
                     }
@@ -184,10 +191,12 @@ function patchMapColors(myMap) {
                         });
 
                         let intercepted = origCall.apply(this, [thisArg, ...args]);
-                        maps.delete(aboba);
-                        return intercepted
+
+                        maps.splice(i, 1);
+                        return intercepted;
                     }
                 }
+
             }
         }
 
